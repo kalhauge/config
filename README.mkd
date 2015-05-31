@@ -1,0 +1,10 @@
+# Configure 
+
+This folder contains the essential config files to make a system work. 
+
+# Rules
+Every program should have no more than one config file. If more is needed
+should the config files reside in thier own repository, and setup in 
+the `system.sh` file.
+
+The `system.sh` file should be considered safe to run at any point.

@@ -2,8 +2,13 @@
 # Author: Christian Gram Kalhauge (christian@kalhauge.dk)
 # Date:   2015-05-31
 
+STATE="VERBOSE"
+
 # import files
 source commands.sh
 
 # Install configure files
+
+# Vim 
 register vimrc $HOME/.vimrc
+github gmarik/Vundle.vim $HOME/.vim/bundle/vundle

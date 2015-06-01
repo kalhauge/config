@@ -2,7 +2,7 @@
 # Author: Christian Gram Kalhauge (christian@kalhauge.dk)
 # Date:   2015-05-31
 
-STATE="VERBOSE"
+STATE=""
 
 # import files
 source commands.sh

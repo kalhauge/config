@@ -9,7 +9,10 @@ call vundle#rc()
 Plugin 'gmarik/vundle'
 
 Plugin 'tpope/vim-sensible'
+
+""
 Plugin 'tpope/vim-surround'
+Plugin 'godlygeek/tabular'
 
 "" Colours
 Plugin 'nanotech/jellybeans.vim'
@@ -74,6 +77,11 @@ noremap <silent> <leader>cu :UltiSnipsEdit<CR>
 
 "" Format <leader>f
 noremap <leader>fef ggVG=
+
+nnoremap <leader>fa= :Tabularize /=<CR>
+vnoremap <leader>fa= :Tabularize /=<CR>
+nnoremap <leader>fa: :Tabularize /:\zs<CR>
+vnoremap <leader>fa: :Tabularize /:\zs<CR>
 
 "" Search <leader>s
 noremap <leader>sa :Ag ""<Left>

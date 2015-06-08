@@ -1,0 +1,5 @@
+
+# From http://irwinkwan.com/2013/06/10/programming-in-the-console-with-gnu-screen-and-vim/
+hardstatus on
+hardstatus alwayslastline
+hardstatus string "%{.kw}%-w%{= kR}(%{r}%n %t%{-}%{= kR})%?%{= .kw}%+w%? %{.kw}%=%c %d/%m/%Y" #B&W & date&time

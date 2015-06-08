@@ -12,3 +12,9 @@ source commands.sh
 # Vim 
 register vimrc $HOME/.vimrc
 github gmarik/Vundle.vim $HOME/.vim/bundle/vundle
+
+# Zsh
+register zshrc $HOME/.zshrc
+
+# Screen
+register screenrc $HOME/.screenrc

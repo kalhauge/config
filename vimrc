@@ -13,6 +13,7 @@ Plugin 'tpope/vim-sensible'
 ""
 Plugin 'tpope/vim-surround'
 Plugin 'godlygeek/tabular'
+Plugin 'mattn/emmet-vim'
 
 "" Colours
 Plugin 'nanotech/jellybeans.vim'
@@ -82,9 +83,15 @@ nnoremap <leader>fa= :Tabularize /=<CR>
 vnoremap <leader>fa= :Tabularize /=<CR>
 nnoremap <leader>fa: :Tabularize /:\zs<CR>
 vnoremap <leader>fa: :Tabularize /:\zs<CR>
+nnoremap <leader>fa<space> :Tabularize / <CR>
+vnoremap <leader>fa<space> :Tabularize / <CR>
+
+nnoremap <leader>K f<space>r<cr>
+nnoremap K g_F<Space><Space>i<CR><Esc>k
 
 "" Search <leader>s
 noremap <leader>sa :Ag ""<Left>
+noremap <leader>ss :nohlsearch<CR> 
 vnoremap <leader>sr "hy:%s/<C-r>h//gc<left><left><left>
 
 "" Toggle <leader>t
@@ -141,6 +148,3 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 """ }}}
-
-
-

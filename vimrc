@@ -148,3 +148,11 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 
 """ }}}
+
+""" {{{
+autocmd Filetype html       setlocal ts=2 sts=2 sw=2
+autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
+autocmd Filetype coffee     setlocal ts=2 sts=2 sw=2
+autocmd Filetype jade       setlocal ts=2 sts=2 sw=2
+autocmd Filetype yaml       setlocal ts=2 sts=2 sw=2
+""" }}}

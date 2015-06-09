@@ -17,9 +17,8 @@ function register () {
         if [ -f $2 ]; then
             printf "%s already exists.. backing up\n" $2
             backup $2
-        else
-            cmd ln -s $config_file $2
-        fi
+        fi 
+         cmd ln -s $config_file $2
     fi
 }
 

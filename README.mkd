@@ -2,9 +2,48 @@
 
 This folder contains the essential config files to make a system work. 
 
-# Rules
+## Rules
 Every program should have no more than one config file. If more is needed
 should the config files reside in thier own repository, and setup in 
 the `system.sh` file.
 
 The `system.sh` file should be considered safe to run at any point.
+
+
+# Setup
+
+## Wifi
+
+Use a combination of `systemd-networkd` and `wpa`. All instructions are taken
+from this [blog](http://beaveris.me/systemd-networkd-with-roaming/). 
+
+Create `/etc/systemd/network/ITERFACE_NAME` file with content::
+
+    [Match]
+    Name=INTERFACE_NAME
+
+    [Network]
+    DHCP=yes
+
+Create `/etc/wpa_supplicant/wpa_supplicant-INTERFACE_NAME.conf` file with content::
+
+    eapol_version=1
+    # update_config=1 only if edit thourg wpa_cli or wpa_gui
+    fast_reauth=1
+    ap_scan=1
+
+    # ... interfaces
+
+Add new networks with:
+
+    $> wpa_passphrase <ESSID> "<passphrase>" >> wpa_supplicant-INTERFACE_NAME.conf
+
+
+Enable `systemd-networkd`, `wpa_supplicant` and `systemd-resolve`:
+
+    $> systemctl enable systemctl-networkd wpa_supplicant@INTERFACE_NAME systemd-resolve
+    $> systemctl start systemctl-networkd wpa_supplicant@INTERFACE_NAME systemd-resolve
+    $> rm /etc/resolve.conf
+    $> ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
+
+

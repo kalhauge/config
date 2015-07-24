@@ -9,9 +9,11 @@ call vundle#rc()
 Plugin 'gmarik/vundle'
 
 Plugin 'tpope/vim-sensible'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-unimpaired'
 
 ""
-Plugin 'tpope/vim-surround'
 Plugin 'godlygeek/tabular'
 Plugin 'mattn/emmet-vim'
 
@@ -62,7 +64,7 @@ set nobackup
 set nowritebackup
 set noswapfile
 
-set wildignore+=*/.git/*,*.class,*.pyc
+set wildignore+=*.class,*.pyc
 
 " Make spliting feel more naturaly
 set splitbelow
@@ -89,8 +91,28 @@ vnoremap <leader>fa<space> :Tabularize / <CR>
 nnoremap <leader>K f<space>r<cr>
 nnoremap K g_F<Space><Space>i<CR><Esc>k
 
+"" Fugitive <leader>g
+noremap <leader>gw :Gwrite<CR>
+noremap <leader>gb :Gblame<CR>
+noremap <leader>gm :Gmove<CR>
+
+noremap <leader>ge :Gedit 
+noremap <leader>gve :Gvsplit 
+noremap <leader>gse :Gsplit 
+
+noremap <leader>gvd :Gvdiff<CR>
+noremap <leader>gd  :Gdiff<CR>
+noremap <leader>gsd :Gsdiff<CR>
+
+noremap <leader>gg :Git 
+noremap <leader>gG :Git! 
+
+noremap <leader>gst :Gstatus<CR>
+noremap <leader>gc :Gcommit<CR>
+
 "" Search <leader>s
 noremap <leader>sa :Ag ""<Left>
+noremap <leader>sg :Ggrep ""<Left>
 noremap <leader>ss :nohlsearch<CR> 
 vnoremap <leader>sr "hy:%s/<C-r>h//gc<left><left><left>
 
@@ -147,6 +169,15 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 let g:UltiSnipsEditSplit="vertical"
 
+"" Syntaxtic
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected"]
+
 """ }}}
 
 """ {{{
@@ -155,4 +186,5 @@ autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 autocmd Filetype coffee     setlocal ts=2 sts=2 sw=2
 autocmd Filetype jade       setlocal ts=2 sts=2 sw=2
 autocmd Filetype yaml       setlocal ts=2 sts=2 sw=2
+autocmd Filetype haskell    setlocal ts=2 sts=2 sw=2
 """ }}}

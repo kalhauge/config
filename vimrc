@@ -74,6 +74,10 @@ set splitright
 
 """ Leader Tree {{{
 
+"" Edit Vimrc
+noremap <silent> <leader>ve :e $MYVIMRC
+noremap <silent> <leader>vs :so $MYVIMRC
+
 "" Control and Config <leader>c
 noremap <silent> <leader>cr :redraw!<CR>
 noremap <silent> <leader>cu :UltiSnipsEdit<CR>
@@ -187,4 +191,5 @@ autocmd Filetype coffee     setlocal ts=2 sts=2 sw=2
 autocmd Filetype jade       setlocal ts=2 sts=2 sw=2
 autocmd Filetype yaml       setlocal ts=2 sts=2 sw=2
 autocmd Filetype haskell    setlocal ts=2 sts=2 sw=2
+autocmd Filetype markdown   setlocal tw=72 
 """ }}}

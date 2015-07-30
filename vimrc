@@ -75,8 +75,8 @@ set splitright
 """ Leader Tree {{{
 
 "" Edit Vimrc
-noremap <silent> <leader>ve :e $MYVIMRC
-noremap <silent> <leader>vs :so $MYVIMRC
+noremap <silent> <leader>ve :e $MYVIMRC<CR>
+noremap <silent> <leader>vs :so $MYVIMRC<CR>
 
 "" Control and Config <leader>c
 noremap <silent> <leader>cr :redraw!<CR>

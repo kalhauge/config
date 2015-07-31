@@ -17,8 +17,11 @@ function register () {
         if [ -f $2 ]; then
             printf "%s already exists.. backing up\n" $2
             backup $2
+        elif [ -h $2 ]; then
+            printf "%s already is a symlink.. removing\n" $2
+            rm $2    
         fi 
-         cmd ln -s $config_file $2
+        cmd ln -s $config_file $2
     fi
 }
 

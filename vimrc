@@ -56,6 +56,7 @@ set nowrap
 set hlsearch
 set ignorecase
 set smartcase
+set autoread
 
 set noerrorbells
 
@@ -69,6 +70,8 @@ set wildignore+=*.class,*.pyc
 " Make spliting feel more naturaly
 set splitbelow
 set splitright
+
+cnoremap w!! w ! sudo tee % > /dev/null
 
 """ }}}
 

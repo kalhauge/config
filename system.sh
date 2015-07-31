@@ -15,10 +15,13 @@ github gmarik/Vundle.vim $HOME/.vim/bundle/vundle
 
 # Zsh
 register zshrc $HOME/.zshrc
-github robbyrussell/oh-my-zsh.git $HOME/.oh-my-zsh
+github robbyrussell/oh-my-zsh $HOME/.oh-my-zsh
 
 # Screen
 register screenrc $HOME/.screenrc
 
 # Tmux
 register tmux.conf $HOME/.tmux.conf
+
+# Termite
+register termite.conf $HOME/.config/termite/config

@@ -8,6 +8,8 @@ STATE="VERBOSE"
 source commands.sh
 
 # Install configure files
+CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+DATA_HOME=${XDG_DATA_HOME:-$HOME/.config}
 
 # Vim 
 register vimrc $HOME/.vimrc
@@ -24,4 +26,7 @@ register screenrc $HOME/.screenrc
 register tmux.conf $HOME/.tmux.conf
 
 # Termite
-register termite.conf $HOME/.config/termite/config
+register termite.conf $CONFIG_HOME/termite/config
+
+# X11
+reqister xconfigs/xprofile.sh $HOME/.xprofile

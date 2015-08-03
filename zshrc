@@ -37,8 +37,11 @@ alias -s sh=/bin/bash
 # Global helpers
 alias -g myip=`echo $LOCAL_IP`
 
-# Functions
+# systemem
 
+alias sctl=systemctl
+
+# Functions
 unset GREP_OPTIONS
 
 autoload -Uz promptinit
@@ -58,4 +61,14 @@ bindkey '^w' backward-kill-word
 bindkey '^r' history-incremental-search-backward
 
 export KEYTIMEOUT=1
+
+# Nix help
+
+nix-search () { 
+    echo "Searching...";
+    nix-env -qaP --description '*' | grep -i "$1"; 
+}
+
+nix-i () { nix-env -iA $1; } 
+
 

@@ -32,6 +32,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'scrooloose/syntastic'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'kchmck/vim-coffee-script'
+Plugin 'dag/vim2hs'
 
 "" Navigation
 Plugin 'scrooloose/nerdtree'
@@ -184,6 +185,10 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected"]
+
+"" vim2hs
+
+let g:haskell_autotags = 1
 
 """ }}}
 

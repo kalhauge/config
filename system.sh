@@ -29,4 +29,4 @@ register tmux.conf $HOME/.tmux.conf
 register termite.conf $CONFIG_HOME/termite/config
 
 # X11
-reqister xconfigs/xprofile.sh $HOME/.xprofile
+register xconfigs/xprofile.sh $HOME/.xprofile

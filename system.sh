@@ -30,3 +30,7 @@ register termite.conf $CONFIG_HOME/termite/config
 
 # X11
 register xconfigs/xprofile.sh $HOME/.xprofile
+
+# NixOS
+mkdir -p $HOME/.nixpkgs
+register nixpkgs.nix $HOME/.nixpkgs/config.nix

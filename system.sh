@@ -1,8 +1,8 @@
-#!/bin/bash 
+#!env bash 
 # Author: Christian Gram Kalhauge (christian@kalhauge.dk)
 # Date:   2015-05-31
 
-STATE="VERBOSE"
+#STATE="VERBOSE"
 
 # import files
 source commands.sh
@@ -16,9 +16,15 @@ register vimrc $HOME/.vimrc
 github gmarik/Vundle.vim $HOME/.vim/bundle/vundle
 
 # Zsh
-register zshrc $HOME/.zshrc
-github robbyrussell/oh-my-zsh $HOME/.oh-my-zsh
+register zsh/zshrc $HOME/.zshrc
 
+ZSH_HOME=$HOME/.oh-my-zsh
+github robbyrussell/oh-my-zsh $ZSH_HOME
+
+ZSH_CUSTOM=$ZSH_HOME/custom
+github spwhitt/nix-zsh-completions $ZSH_CUSTOM/plugins/nix
+register_all zsh/themes $ZSH_CUSTOM
+ 
 # Screen
 register screenrc $HOME/.screenrc
 

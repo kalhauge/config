@@ -18,7 +18,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'mattn/emmet-vim'
 
 "" Colours
-Plugin 'nanotech/jellybeans.vim'
+Plugin 'kalhauge/jellybeans.vim'
 
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'Lokaltog/vim-easymotion'
@@ -189,6 +189,7 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming em
 "" vim2hs
 
 let g:haskell_autotags = 1
+let g:haskell_conceal_wide = 1
 
 """ }}}
 

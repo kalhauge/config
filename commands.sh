@@ -30,9 +30,9 @@ function github () {
     url="https://github.com/${1}.git"
     if [ -d $2 ]; then 
         printf "%s exists.. updates\n" $2
-        cmd pushd $2
+        pushd $2
         cmd git pull
-        cmd popd
+        popd
     else 
         cmd git clone $url $2 
     fi 

@@ -26,7 +26,7 @@ FINE=$GREEN
 
 # LOAD UTILS
 
-. ~/.themes/git.zsh $GREEN $YELLOW $RED $WHITE
+. $ZSH_CUSTOM/git.zsh $GREEN $YELLOW $RED $WHITE
 
 # LOCAL
 

@@ -13,13 +13,13 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
 
+Plugin 'jamessan/vim-gnupg'
 ""
 Plugin 'godlygeek/tabular'
 Plugin 'mattn/emmet-vim'
 
 "" Colours
 Plugin 'kalhauge/jellybeans.vim'
-
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'Lokaltog/vim-easymotion'
 
@@ -65,6 +65,8 @@ set noerrorbells
 set nobackup
 set nowritebackup
 set noswapfile
+
+set cryptmethod=blowfish2
 
 set wildignore+=*.class,*.pyc
 
@@ -191,7 +193,12 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming em
 let g:haskell_autotags = 1
 let g:haskell_conceal_wide = 1
 
+"" gnupg.vim
+
+let g:GPGExecutable = "gpg2"
+
 """ }}}
+
 
 """ {{{
 autocmd Filetype html       setlocal ts=2 sts=2 sw=2

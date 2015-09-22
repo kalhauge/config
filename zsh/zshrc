@@ -62,6 +62,12 @@ bindkey '^r' history-incremental-search-backward
 
 export KEYTIMEOUT=1
 
+
+# Environmet
+
+export VISUAL=vim
+export EDITOR="$VISUAL"
+
 # Nix help
 
 nix-search () { 

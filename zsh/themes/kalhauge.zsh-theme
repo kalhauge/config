@@ -75,6 +75,6 @@ function command_line() {
 }
 
 PROMPT=$(print "$(info_line)\n$(command_line)")
-
+RPROMPT=""
 
 

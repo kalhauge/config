@@ -14,7 +14,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
 
 Plugin 'jamessan/vim-gnupg'
-""
+
+"" Edit-scripts
 Plugin 'godlygeek/tabular'
 Plugin 'mattn/emmet-vim'
 
@@ -26,7 +27,6 @@ Plugin 'Lokaltog/vim-easymotion'
 """ Snips
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
-
 
 """ Syntax
 Plugin 'scrooloose/syntastic'
@@ -45,6 +45,7 @@ filetype plugin indent on
 
 let mapleader=" "
 
+"" jellybeans
 color jellybeans
 
 """ Sane settings{{{
@@ -97,6 +98,8 @@ nnoremap <leader>fa: :Tabularize /:\zs<CR>
 vnoremap <leader>fa: :Tabularize /:\zs<CR>
 nnoremap <leader>fa<space> :Tabularize / <CR>
 vnoremap <leader>fa<space> :Tabularize / <CR>
+vnoremap <leader>fa :Tabularize /
+nnoremap <leader>fa :Tabularize /
 
 nnoremap <leader>K f<space>r<cr>
 nnoremap K g_F<Space><Space>i<CR><Esc>k
@@ -132,6 +135,7 @@ noremap <silent> <leader>tw :set list!<CR>
 
 "" Buffers <leader>b
 noremap <leader>bs :CtrlPBuffer<CR>
+noremap <leader>bl :ls<CR>:b <Space>
 
 " EASY motions: Line motions
 nmap s <Plug>(easymotion-s2)
@@ -187,6 +191,8 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute " ,"trimming empty <", "unescaped &" , "lacks \"action", "is not recognized!", "discarding unexpected"]
+
+let g:syntastic_java_javac_config_file_enabled = 1
 
 "" vim2hs
 

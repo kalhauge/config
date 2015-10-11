@@ -13,6 +13,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
 
+"" Crypto
 Plugin 'jamessan/vim-gnupg'
 
 "" Edit-scripts
@@ -28,16 +29,23 @@ Plugin 'Lokaltog/vim-easymotion'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
+""" Haskell
+Plugin 'eagletmt/neco-ghc'
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'dag/vim2hs'
+Plugin 'Shougo/vimproc.vim'
+
 """ Syntax
 Plugin 'scrooloose/syntastic'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'kchmck/vim-coffee-script'
-Plugin 'dag/vim2hs'
+Plugin 'vim-pandoc/vim-pandoc-syntax'
 
 "" Navigation
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
 Plugin 'rking/ag.vim'
+Plugin 'christoomey/vim-tmux-navigator'
 
 syntax on
 filetype plugin indent on 
@@ -137,7 +145,7 @@ noremap <silent> <leader>tw :set list!<CR>
 noremap <leader>bs :CtrlPBuffer<CR>
 noremap <leader>bl :ls<CR>:b <Space>
 
-" EASY motions: Line motions
+"" EASY motions: Line motions
 nmap s <Plug>(easymotion-s2)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
@@ -146,6 +154,16 @@ map <Leader>k <Plug>(easymotion-k)
  noremap <leader>p "+p
 vnoremap <leader>y "+y
 
+""" Language Specifics <leader>m {{{
+function s:HaskellBindings () 
+    noremap <leader>mt   :GhcModType<CR>
+    noremap <leader>msf  :GhcModSplitFunCase<CR>
+    noremap <leader>me   :GhcModExpand<CR>
+endfunction
+
+au BufRead *.hs call s:HaskellBindings()
+
+""" }}}
 """ }}}
 
 """ Sane navigations {{{
@@ -165,6 +183,7 @@ cnoremap <C-f> <Right>
 cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 """ }}}
+
 
 """ Plugins {{{
 

@@ -9,7 +9,6 @@ the `system.sh` file.
 
 The `system.sh` file should be considered safe to run at any point.
 
-
 # Setup
 
 ## Wifi

@@ -13,6 +13,11 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-unimpaired'
 
+Plugin 'jgdavey/tslime.vim'
+
+Plugin 'ervandew/supertab'
+Plugin 'wikitopian/hardmode'
+
 "" Crypto
 Plugin 'jamessan/vim-gnupg'
 
@@ -24,22 +29,27 @@ Plugin 'mattn/emmet-vim'
 Plugin 'kalhauge/jellybeans.vim'
 Plugin 'Lokaltog/vim-powerline'
 Plugin 'Lokaltog/vim-easymotion'
+Plugin 'nathanaelkane/vim-indent-guides'
 
 """ Snips
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 
 """ Haskell
-Plugin 'eagletmt/neco-ghc'
-Plugin 'eagletmt/ghcmod-vim'
-Plugin 'dag/vim2hs'
 Plugin 'Shougo/vimproc.vim'
+Plugin 'neovimhaskell/haskell-vim'
+"" Plugin 'enomsg/vim-haskellConcealPlus'
+Plugin 'eagletmt/ghcmod-vim'
+Plugin 'eagletmt/neco-ghc'
+" Plugin 'Twinside/vim-hoogle'
 
 """ Syntax
 Plugin 'scrooloose/syntastic'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'vim-pandoc/vim-pandoc-syntax'
+
+Plugin 'vim-pandoc/vim-pandoc'
 
 "" Navigation
 Plugin 'scrooloose/nerdtree'
@@ -68,14 +78,17 @@ set ignorecase
 set smartcase
 set autoread
 
+set relativenumber
 set noerrorbells
+
+set complete=.,w,b,u,t,i
 
 " Disable backup and swapfiles
 set nobackup
 set nowritebackup
 set noswapfile
 
-set cryptmethod=blowfish2
+" set cryptmethod=blowfish2
 
 set wildignore+=*.class,*.pyc
 
@@ -88,6 +101,8 @@ cnoremap w!! w ! sudo tee % > /dev/null
 """ }}}
 
 """ Leader Tree {{{
+
+nnoremap <leader>h <Esc>:call ToggleHardMode()<CR>
 
 "" Edit Vimrc
 noremap <silent> <leader>ve :e $MYVIMRC<CR>
@@ -141,6 +156,9 @@ vnoremap <leader>sr "hy:%s/<C-r>h//gc<left><left><left>
 noremap <silent> <leader>tn :NERDTreeToggle<CR>
 noremap <silent> <leader>tw :set list!<CR>
 
+"" Async <leader>a
+noremap <silent> <leader>am :!tmux send-keys -t "2" 'make' Enter<CR><CR>
+
 "" Buffers <leader>b
 noremap <leader>bs :CtrlPBuffer<CR>
 noremap <leader>bl :ls<CR>:b <Space>
@@ -155,13 +173,15 @@ map <Leader>k <Plug>(easymotion-k)
 vnoremap <leader>y "+y
 
 """ Language Specifics <leader>m {{{
-function s:HaskellBindings () 
-    noremap <leader>mt   :GhcModType<CR>
-    noremap <leader>msf  :GhcModSplitFunCase<CR>
-    noremap <leader>me   :GhcModExpand<CR>
-endfunction
-
-au BufRead *.hs call s:HaskellBindings()
+if !exists("HaskellBindings")
+    function! s:HaskellBindings () 
+        noremap <leader>mt   :GhcModType<CR>
+        noremap <leader>mc   :GhcModTypeClear<CR>
+        noremap <leader>msf  :GhcModSplitFunCase<CR>
+        noremap <leader>me   :GhcModExpand<CR>
+    endfunction
+    au BufRead *.hs call s:HaskellBindings()
+endif
 
 """ }}}
 """ }}}
@@ -204,7 +224,7 @@ let g:UltiSnipsEditSplit="vertical"
 
 "" Syntaxtic
 
-let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_always_populate_loc_list = 0
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
@@ -224,6 +244,29 @@ let g:GPGExecutable = "gpg2"
 
 """ }}}
 
+""" Neo Vim {{{
+
+if has('nvim')
+    "" Hackaround
+    nmap <BS> <C-W>h 
+endif
+
+""" }}}
+
+""" haskell-vim {{{
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+""" }}}
+
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+""autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=white ctermbg=3
+"" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 
 """ {{{
 autocmd Filetype html       setlocal ts=2 sts=2 sw=2
@@ -233,4 +276,5 @@ autocmd Filetype jade       setlocal ts=2 sts=2 sw=2
 autocmd Filetype yaml       setlocal ts=2 sts=2 sw=2
 autocmd Filetype haskell    setlocal ts=2 sts=2 sw=2
 autocmd Filetype markdown   setlocal tw=72 
+autocmd Filetype pandoc     setlocal tw=72 fo+=toqn
 """ }}}

@@ -1,4 +1,4 @@
-#!env bash 
+#!/usr/bin/env bash 
 # Author: Christian Gram Kalhauge (christian@kalhauge.dk)
 # Date:   2015-05-31
 
@@ -14,6 +14,10 @@ DATA_HOME=${XDG_DATA_HOME:-$HOME/.config}
 # Vim 
 register vimrc $HOME/.vimrc
 github gmarik/Vundle.vim $HOME/.vim/bundle/vundle
+
+# Neo Vim 
+register vimrc $HOME/.nvimrc
+ln -s $HOME/.vim $HOME/.nvim
 
 # Zsh
 register zsh/zshrc $HOME/.zshrc

@@ -1,66 +1,67 @@
 "" Vim esentials 
+
 "" - Uses Vundle
-
-"" Vundle {{{
+setlocal foldmethod=marker
+"" Plug {{{
 set nocompatible 
-filetype off 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc() 
-Plugin 'gmarik/vundle'
 
-Plugin 'tpope/vim-sensible'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-unimpaired'
+call plug#begin('~/.vim/plugged')
 
-Plugin 'jgdavey/tslime.vim'
+"" Plug 'gmarik/vundle'
 
-Plugin 'ervandew/supertab'
-Plugin 'wikitopian/hardmode'
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
+
+Plug 'jgdavey/tslime.vim'
+
+Plug 'Valloric/YouCompleteMe'
+
+Plug 'ervandew/supertab'
+"  Plug 'wikitopian/hardmode'
 
 "" Crypto
-Plugin 'jamessan/vim-gnupg'
+Plug 'jamessan/vim-gnupg'
 
 "" Edit-scripts
-Plugin 'godlygeek/tabular'
-Plugin 'mattn/emmet-vim'
+Plug 'godlygeek/tabular'
+Plug 'mattn/emmet-vim'
 
 "" Colours
-Plugin 'kalhauge/jellybeans.vim'
-Plugin 'Lokaltog/vim-powerline'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'nathanaelkane/vim-indent-guides'
+Plug 'kalhauge/jellybeans.vim'
+Plug 'Lokaltog/vim-powerline'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'nathanaelkane/vim-indent-guides'
 
 """ Snips
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
 
 """ Haskell
-Plugin 'Shougo/vimproc.vim'
-Plugin 'neovimhaskell/haskell-vim'
-"" Plugin 'enomsg/vim-haskellConcealPlus'
-Plugin 'eagletmt/ghcmod-vim'
-Plugin 'eagletmt/neco-ghc'
-" Plugin 'Twinside/vim-hoogle'
+Plug 'Shougo/vimproc.vim', { 'for': 'haskell'}
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell'}
+Plug 'eagletmt/ghcmod-vim', { 'for': 'haskell'}
+Plug 'eagletmt/neco-ghc', { 'for': 'haskell' }
 
 """ Syntax
-Plugin 'scrooloose/syntastic'
-Plugin 'digitaltoad/vim-jade'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'vim-pandoc/vim-pandoc-syntax'
+Plug 'scrooloose/syntastic'
+Plug 'digitaltoad/vim-jade'
+Plug 'kchmck/vim-coffee-script', { 'for': 'coffeescript' }
+Plug 'vim-pandoc/vim-pandoc-syntax', { 'for': 'markdown' }
 
-Plugin 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc', { 'for': 'markdown' }
+Plug 'LnL7/vim-nix'
 
 "" Navigation
-Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
-Plugin 'rking/ag.vim'
-Plugin 'christoomey/vim-tmux-navigator'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'kien/ctrlp.vim', { 'on': 'CtrlP' }
+Plug 'rking/ag.vim', { 'on': 'Ag' }
+Plug 'christoomey/vim-tmux-navigator'
 
-syntax on
-filetype plugin indent on 
+call plug#end()
+
 "" }}}
-
 let mapleader=" "
 
 "" jellybeans
@@ -158,6 +159,7 @@ noremap <silent> <leader>tw :set list!<CR>
 
 "" Async <leader>a
 noremap <silent> <leader>am :!tmux send-keys -t "2" 'make' Enter<CR><CR>
+noremap <silent> <leader>ar :call SendToTmux("!-1\n\n")<CR><CR>
 
 "" Buffers <leader>b
 noremap <leader>bs :CtrlPBuffer<CR>
@@ -204,8 +206,7 @@ cnoremap <M-b> <S-Left>
 cnoremap <M-f> <S-Right>
 """ }}}
 
-
-""" Plugins {{{
+""" Plugs {{{
 
 """ CtrlP
 let g:ctrlp_working_path_mode = 'ra'
@@ -215,12 +216,20 @@ let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclu
 
 let g:EasyMotion_do_mapping = 0
 
-"" UltiSnips
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"" Ultisnips {{{
+
+" make YCM compatible with UltiSnips (using supertab)
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:SuperTabDefaultCompletionType = '<C-n>'
+
+" better key bindings for UltiSnipsExpandTrigger
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 let g:UltiSnipsEditSplit="vertical"
+""" }}}
 
 "" Syntaxtic
 
@@ -253,6 +262,13 @@ endif
 
 """ }}}
 
+""" tslime {{{
+
+let g:tslime_always_current_session = 1 
+let g:tslime_always_current_window = 1
+
+""" }}}
+
 """ haskell-vim {{{
 let g:haskell_enable_quantification = 1
 let g:haskell_enable_recursivedo = 1
@@ -268,7 +284,7 @@ let g:indent_guides_guide_size = 1
 ""autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=white ctermbg=3
 "" autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
 
-""" {{{
+""" Filetype specific {{{
 autocmd Filetype html       setlocal ts=2 sts=2 sw=2
 autocmd Filetype javascript setlocal ts=2 sts=2 sw=2
 autocmd Filetype coffee     setlocal ts=2 sts=2 sw=2

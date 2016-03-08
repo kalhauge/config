@@ -97,6 +97,10 @@ function github () {
     fi 
 }
 
+function get () {
+    curl -fLo $2 --create-dirs $1
+}
+
 # backups the file
 function backup () {
     new_name="$1.old"

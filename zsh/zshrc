@@ -62,6 +62,18 @@ bindkey '^r' history-incremental-search-backward
 
 export KEYTIMEOUT=1
 
+itprofile () {
+    echo -n -e "\033]50;SetProfile=$1\a"
+}
+
+# precmd () {
+#     local hours=$(date +%H);
+#     if [[ $hours > 8 ]] & [[ $hours < 18 ]]; then
+#         itprofile Light
+#     else 
+#         itprofile Dark
+#     fi
+# }
 
 # Environmet
 
@@ -77,6 +89,7 @@ nix-search () {
     echo "Searching...";
     nix-env -qaP --description '*' | grep -i "$1"; 
 }
+
 
 nix-i () { nix-env -iA $1; } 
 

@@ -45,4 +45,3 @@ Enable `systemd-networkd`, `wpa_supplicant` and `systemd-resolve`:
     $> rm /etc/resolve.conf
     $> ln -s /run/systemd/resolve/resolv.conf /etc/resolv.conf
 
-

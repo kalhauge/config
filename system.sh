@@ -28,7 +28,10 @@ github robbyrussell/oh-my-zsh $ZSH_HOME
 ZSH_CUSTOM=$ZSH_HOME/custom
 github spwhitt/nix-zsh-completions $ZSH_CUSTOM/plugins/nix
 register_all zsh/themes $ZSH_CUSTOM
- 
+
+# Spacemacs
+register spacemacs $HOME/.spacemacs
+
 # Screen
 register screenrc $HOME/.screenrc
 

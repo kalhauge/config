@@ -12,28 +12,9 @@
     enableWideVine = true;
   };
 
-  packageOverrides = let
-    z3hsk =
-      { mkDerivation, base, containers, hspec, mtl, QuickCheck, stdenv, z3}:
-      mkDerivation {
-        pname = "z3";
-        version = "4.1.0";
-        sha256 = "1vpmwizxcab1mlz7vp3hp72ddla7805jn0lq60fmkjgmj95ryvq9";
-        isLibrary = true;
-        isExecutable = true;
-        libraryHaskellDepends = [ base containers mtl ];
-        librarySystemDepends = [ z3 ];
-        testHaskellDepends = [ base hspec QuickCheck ];
-        preBuild = ''
-          export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:${z3}/lib
-        '';
-        homepage = "http://bitbucket.org/iago/z3-haskell";
-        description = "Bindings for the Z3 Theorem Prover";
-        license = stdenv.lib.licenses.bsd3;
-      };
-  in super: let
+  packageOverrides = super:
+  let
     self = super.pkgs;
-    # z3 = self.haskellPackages.callPackage z3hsk { z3 = super.z3; };
   in rec {
     all = with self; buildEnv {
       name = "all";
@@ -41,16 +22,24 @@
         myPythonEvn
         python35
         myHaskellEnv
-        jdk8
+        stack
+        jdk8 ant
+        sbcl
 
         fasd
         ranger
         tree
 
+        coreutils
+
+        graphviz 
+
         git
         # mercury
-        
+
         aspell
+        aspellDicts.da
+        aspellDicts.en
 
         zsh
         wget
@@ -58,7 +47,10 @@
         silver-searcher
         gnuplot
         jq
+        httpie
         ledger
+
+        python27Packages.platformio
       ];
     };
 
@@ -67,7 +59,10 @@
       buildInputs = with self; [
         python27
         python27Packages.pexif
-        python27Packages.pillow
+        python27Packages.yapf
+        python27Packages.platformio
+        python27Packages.pip
+        # python27Packages.pillow
       ];
     };
 
@@ -76,10 +71,19 @@
       buildInputs = with self; [
         python35
         python35Packages.pillow
+        python35Packages.platformio
       ];
     };
 
-    myHaskellEnv = self.haskellPackages.ghcWithPackages
+    myHaskellEnv = (self.haskellPackages.override {
+      overrides = self: super: {
+        mkDerivation = args: super.mkDerivation (args // {
+          doCheck = false; 
+          enableLibraryProfiling = true;
+          # enableExecutableProfiling = true;
+        });
+      };
+    }).ghcWithHoogle
       ( p: with p;
         [ cabal-install ghc-mod
           attoparsec
@@ -88,10 +92,29 @@
           vector
           QuickCheck
           hspec
-          z3
+          (if (!self.stdenv.isDarwin)
+          then z3
+          else z3.overrideDerivation (drv: {
+            preBuild = ''
+            export DYLD_LIBRARY_PATH=${self.z3}/lib
+            '';
+
+            postBuild = ''
+            unset DYLD_LIBRARY_PATH
+            '';
+            }))
+          profunctors
+          cabal2nix
           binary
           docopt
           lens
+          transformers
+          pipes
+          pipes-bytestring
+          pipes-binary
+          monad-parallel
+          stylish-haskell
+          zlib
         ]
       );
   };

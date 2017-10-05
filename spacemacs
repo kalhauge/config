@@ -1,4 +1,4 @@
-;; -*- mode: emos-lisp -*-
+;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
@@ -31,6 +31,10 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     yaml
+     elm
+     javascript
+     purescript
      csv
      html
      ;; ----------------------------------------------------------------
@@ -53,12 +57,15 @@ values."
      clojure
      emacs-lisp
      common-lisp
-
+     (coq :variables
+           proof-general-path
+           "~/.emacs.d/private/local/PG/generic/proof-site")
      latex
      git
      github
+     graphviz
      (org :variables
-          org-enable-github-support t
+          ;; org-enable-github-support t
           org-enable-bootstrap-support t
           )
      markdown
@@ -131,14 +138,14 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner 'nil
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
    ;; `recents' `bookmarks' `projects' `agenda' `todos'."
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '(recents projects )
+   dotspacemacs-startup-lists '(agenda recents projects )
    ;; True if the home buffer should respond to resize events.
    dotspacemacs-startup-buffer-responsive t
    ;; Default major mode of the scratch buffer (default `text-mode')
@@ -152,7 +159,7 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
+   dotspacemacs-default-font '("Meslo LG M DZ for Powerline"
                                :size 13
                                :weight normal
                                :width normal
@@ -319,138 +326,251 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (add-hook 'java-mode-hook (lambda ()
-                              (setq c-basic-offset 2)))
+  (add-hook 'java-mode-hook
+   (lambda () (setq c-basic-offset 2)))
 
-  (setq eclim-eclipse-dirs "~/java-mars/Eclipse.app/Contents/Eclipse"
-       eclim-executable "~/java-mars/Eclipse.app/Contents/Eclipse/eclim")
+  (setq
+   eclim-eclipse-dirs "~/.p2/pool/"
+   eclim-executable "~/.p2/pool/plugins/org.eclim_2.7.0/bin/eclim"
+   ;; Use another eclimd executable
+   eclimd-executable "~/.p2/pool/plugins/org.eclim_2.7.0/bin/eclimd"
+   ;; Specify the workspace to use by default
+   ;; Whether or not to block emacs until eclimd is ready
+   eclimd-wait-for-process nil)
+
+  (setq-default dotspacemacs-configuration-layers
+                '((haskell :variables haskell-process-type 'stack-ghci)))
+
+  (when (configuration-layer/package-usedp 'haskell)
+    (add-hook 'haskell-interactive-mode-hook
+              (lambda ()
+                (setq-local evil-move-cursor-back nil))))
+
+  (when (configuration-layer/package-usedp 'haskell)
+    (defadvice haskell-interactive-switch (after spacemacs/haskell-interactive-switch-advice activate)
+      (when (eq dotspacemacs-editing-style 'vim)
+        (call-interactively 'evil-insert))))
+
   (exec-path-from-shell-initialize)
   (exec-path-from-shell-copy-env "NIX_GHC")
+  (exec-path-from-shell-copy-env "NIX_PATH")
   (exec-path-from-shell-copy-env "NIX_GHCPKG")
   (exec-path-from-shell-copy-env "NIX_GHC_DOCDIR")
   (exec-path-from-shell-copy-env "NIX_GHC_LIBDIR")
   (exec-path-from-shell-copy-env "DYLD_LIBRARY_PATH")
 
+  (remove-hook 'prog-mode-hook #'smartparens-mode)
+  (spacemacs/toggle-smartparens-globally-off)
+
   (setq spacemacs-indent-sensitive-modes
         (add-to-list 'spacemacs-indent-sensitive-modes 'nix-mode))
 
-  (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((sh . t)
-      (python . t)
-      (haskell . t)
-      (lisp . t)
-      (dot . t)
-      ))
-
-  (setq org-confirm-babel-evaluate nil)
-
   (spacemacs/add-to-hooks 'parinfer-mode '(lisp-mode-hook))
 
-  (setq my-ledger-file "~/Dropbox/Economy/ledger.dat")
+  (setq reftex-bibliography-commands '("bibliography" "nobibliography" "addbibresource"))
 
-  (defun my-ledger-find ()
+  (setq my/ledger-file "~/Dropbox/Economy/ledger.dat")
+
+  (defun my/ledger-find ()
     (interactive)
-    (find-file my-ledger-file)
+    (find-file my/ledger-file)
     (goto-char (point-max)))
-
-  (defun matches-in-buffer (regexp &optional buffer)
-    "return a list of matches of REGEXP in BUFFER or the current buffer if not given."
-    (let ((matches))
-      (save-match-data
-        (save-excursion
-          (with-current-buffer (or buffer (current-buffer))
-            (save-restriction
-              (widen)
-              (goto-char 1)
-              (while (search-forward-regexp regexp nil t 1)
-                (push (match-string-no-properties 1) matches)))))
-        matches)))
-
-  (setenv "PAGER" "/bin/cat")
-
-  (defun my-ledger (command &optional regex file)
-    (remove ""
-            (split-string
-             (shell-command-to-string
-              (format "ledger -f %s %s %s"
-                      (or file my-ledger-file)
-                      command
-                      (or regex ".*")))
-             "\n")))
-
-  (defun my-ledger-find-accounts (&optional regex file)
-    (my-ledger "accounts" regex file))
-
-  (defun my-ledger-split ()
-    (interactive)
-    (message "hello %s" 1))
-
-  (defun my-ledger-find-payees (&optional regex file)
-    (my-ledger "payees" regex file))
-
-  (setq helm-source-ledger-accounts
-        '((name . "accounts:")
-          (candidates . my-ledger-find-accounts)
-          (action . identity)
-          ))
-
-  (setq helm-source-ledger-payees
-        '((name . "payees: ")
-          (candidates . my-ledger-find-payees)
-          (action . identity)))
-
-  (defun helm-ledger-accounts ()
-    (helm :sources helm-source-ledger-accounts))
-
-  (defun helm-ledger-payees ()
-    (helm :sources helm-source-ledger-payees))
-
-  (defun my-ledger-add-transaction ()
-    (interactive)
-    (let* ((account (helm-ledger-accounts))
-           (payee (ido-completing-read "Payee: " (my-ledger-find-payees))))
-    (my-ledger-find)
-    (insert "\n")
-    (insert (format-time-string "%Y/%m/%d "))
-    (insert payee)
-    (insert "\n    ")
-    (save-excursion
-      (let ()
-        (insert "\n    " account)
-        ))
-    (evil-insert-state)))
-
 
   (spacemacs/declare-prefix "=" "private bindings")
   (spacemacs/declare-prefix "=l" "ledger")
   (spacemacs/set-leader-keys
-    "=lf" 'my-ledger-find
+    "=lf" 'my/ledger-find)
 
-    "=la" 'my-ledger-add-transaction)
-  (with-eval-after-load 'ledger-mode
-    (define-key ledger-reconcile-mode-map
-      (kbd "C-c C-t") 'ledger-reconcile-toggle)
-    (define-key ledger-reconcile-mode-map
-      (kbd "C-c C-b") 'ledger-display-balance)
-    (define-key ledger-reconcile-mode-map
-      (kbd "C-c C-f") 'ledger-reconcile-finish)
-    (define-key ledger-reconcile-mode-map
-      (kbd "C-c C-a") 'ledger-reconcile-add))
-
-  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
+  (require 'ob-dot)
+  (require 'ob-python)
+  (require 'ob-haskell)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((shell . t)
+     (sh . t)
+     (python . t)
+     (haskell . t)
+     (lisp . t)
+     (dot . t)
+     ))
 
   (with-eval-after-load 'org
     (setq org-startup-indented t)
+    ;; Disable line-numbers
+    (add-hook 'org-mode-hook
+              (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
+    ;; (setq org-confirm-babel-evaluate nil)
+    (setq org-clock-persist 'history)
+    (org-clock-persistence-insinuate)
     (spacemacs/set-leader-keys-for-major-mode 'org-mode
       "c" nil
       "cc" 'org-edit-src-code
       "ce" 'org-babel-execute-maybe
       "cx" 'org-babel-execute-buffer))
+  ;; (setq org-format-latex-options :scale 2.0)
 
-  ; (setq org-format-latex-options :scale 2.0)
+  (setq org-refile-targets '((org-agenda-files . (:maxlevel . 6))))
 
-  )
+  (setq org-agenda-custom-commands
+        '(("c" . "My Custom Agendas")
+          ("cu" "Unscheduled TODO"
+           ((todo ""
+                  ((org-agenda-overriding-header "\nUnscheduled TODO")
+                   (org-agenda-skip-function
+                    '(org-agenda-skip-entry-if 'timestamp)))))
+           nil nil)
+          ("ca" "Agenda"
+           ((agenda "" ((org-agenda-ndays 4)))
+            (tags-todo "-CANCELLED/!NEXT"
+                       ((org-agenda-overriding-header "\nNEXT tasks")
+                        (org-tags-match-list-sublevels t)))
+            )
+           ((org-agenda-compact-blocks t)))))
+
+
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+          (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)" "PHONE" "MEETING")))
+
+  (setq org-agenda-compact-blocks t)
+
+  (defvar my/notes-file "~/Dropbox/Notes/notes.org" "My Notes file")
+  (defvar my/task-template "* TODO %^{Task}
+:PROPERTIES:
+:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}
+:END:
+Captured %<%Y-%m-%d %H:%M>
+%?
+
+%i" "Task-template")
+
+  (setq
+   org-enforce-todo-dependencies t
+   org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM"
+   org-capture-templates
+   `(
+     ("t" "Task" entry
+      (file+headline ,my/notes-file "Inbox")
+      ,my/task-template
+      )
+     ("T" "Quick task" entry
+      (file+headline ,my/notes-file "Inbox")
+      "* TODO %^{Task}\nSCHEDULED: %t\n"
+      :immediate-finish t)
+     ("i" "Interrupting task" entry
+      (file+headline ,my/notes-file "Inbox")
+      "* STARTED %?\n"
+      :clock-in t
+      :clock-resume t)
+     ("n" "Add a note to the current Task" entry
+      (clock)
+      "* %?"
+      :unnarrowed t
+      )
+     ("e" "Event" entry
+      (file+headline ,my/notes-file "Events")
+      "* %^{Event}\nSCHEDULED: %^t\n%?"
+      )
+     ("s" "Add a subtask to the current task" entry
+      (clock)
+      ,my/task-template
+      :unnarrowed t
+      )
+     ("j" "Journal Entry" plain
+      (file+datetree+prompt ,my/notes-file)
+      "%?"
+      :unnarrowed t
+      :prepend t
+      )
+     ("l" "Ledger entries")
+     ("lc" "Cash" plain
+      (file ,my/ledger-file)
+      "%(org-read-date) * %^{Payee}
+    Expenses:Cash
+    Expenses:%^{Account}  %^{Amount}
+  ")
+     )))
+
+;; (defun my/ledger ()
+;;   (defun matches-in-buffer (regexp &optional buffer)
+;;     "return a list of matches of REGEXP in BUFFER or the current buffer if not given."
+;;     (let ((matches))
+;;       (save-match-data
+;;         (save-excursion
+;;           (with-current-buffer (or buffer (current-buffer))
+;;             (save-restriction
+;;               (widen)
+;;               (goto-char 1)
+;;               (while (search-forward-regexp regexp nil t 1)
+;;                 (push (match-string-no-properties 1) matches)))))
+
+
+;;   (setenv "PAGER" "/bin/cat")
+
+;;   (defun my-ledger (command &optional regex file)
+;;     (remove ""
+;;             (split-string
+;;              (shell-command-to-string
+;;               (format "ledger -f %s %s %s"
+;;                       (or file my-ledger-file)
+;;                       command
+;;                       (or regex ".*")))
+;;              "\n")))
+
+;;   (defun my-ledger-find-accounts (&optional regex file)
+;;     (my-ledger "accounts" regex file))
+
+;;   (defun my-ledger-split ()
+;;     (interactive)
+;;     (message "hello %s" 1))
+
+;;   (defun my-ledger-find-payees (&optional regex file)
+;;     (my-ledger "payees" regex file))
+
+;;   (setq helm-source-ledger-accounts
+;;         '((name . "accounts:")
+;;           (candidates . my-ledger-find-accounts)
+;;           (action . identity)
+;;           ))
+
+;;   (setq helm-source-ledger-payees
+;;         '((name . "payees: ")
+;;           (candidates . my-ledger-find-payees)
+;;           (action . identity)))
+
+;;   (defun helm-ledger-accounts ()
+;;     (helm :sources helm-source-ledger-accounts))
+
+;;   (defun helm-ledger-payees ()
+;;     (helm :sources helm-source-ledger-payees))
+
+;;   (defun my-ledger-add-transaction ()
+;;     (interactive)
+;;     (let* ((account (helm-ledger-accounts))
+;;            (payee (ido-completing-read "Payee: " (my-ledger-find-payees))))
+;;     (my-ledger-find)
+;;     (insert "\n")
+;;     (insert (format-time-string "%Y/%m/%d "))
+;;     (insert payee)
+;;     (insert "\n    ")
+;;     (save-excursion
+;;       (let ()
+;;         (insert "\n    " account)
+;;         ))
+;;     (evil-insert-state)))
+
+;;   ;; (with-eval-after-load 'ledger-mode
+;;   ;;   (define-key ledger-reconcile-mode-map
+;;   ;;     (kbd "C-c C-t") 'ledger-reconcile-toggle)
+;;   ;;   (define-key ledger-reconcile-mode-map
+;;   ;;     (kbd "C-c C-b") 'ledger-display-balance)
+;;   ;;   (define-key ledger-reconcile-mode-map
+;;   ;;     (kbd "C-c C-f") 'ledger-reconcile-finish)
+;;   ;;   (define-key ledger-reconcile-mode-map
+;;   ;;     (kbd "C-c C-a") 'ledger-reconcile-add))
+
+;;   )
+
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -470,13 +590,15 @@ you should place your code here."
      ("account" "%(binary) -f %(ledger-file) reg %(account)"))))
  '(org-agenda-files
    (quote
-    ("~/Dropbox/Notes/Projects/linear-time_linearization.org" "~/Dropbox/Notes/Projects/jbx.org" "~/Dropbox/Skole/Active/CS161 Fundementals of Artificial Intelligence/CS161.org" "~/Dropbox/Notes/Projects/wiretap.org" "~/Dropbox/Notes/Teaching/CS132/CS132.org" "~/org/notes.org")))
+    ("~/Dropbox/Notes/School/CS239/CS239.org" "~/Dropbox/Notes/Projects/wiretap.org" "~/Dropbox/Notes/notes.org")))
  '(package-selected-packages
    (quote
-    (slime-company hide-comnt helm-purpose window-purpose imenu-list csv-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data srefactor alert log4e gntp org yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic parinfer slime common-lisp-snippets auctex-latexmk ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spotify spacemacs-theme spaceline smeargle reveal-in-osx-finder restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el pbcopy paradox ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nix-mode neotree move-text mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum linum-relative link-hint ledger-mode launchctl intero info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-spotify helm-projectile helm-nixos-options helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md flyspell-correct-helm flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu elisp-slime-nav dumb-jump company-statistics company-nixos-options company-ghci company-ghc company-emacs-eclim company-cabal company-auctex column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+    (org-category-capture parent-mode multi gitignore-mode marshal logito pcache flx goto-chg diminish nixos-options eval-sexp-fu packed graphviz-dot-mode yaml-mode winum fuzzy elm-mode livid-mode json-mode company-tern web-beautify skewer-mode simple-httpd json-snatcher json-reformat js2-refactor js2-mode js-doc tern coffee-mode company-coq company-math math-symbol-lists psci purescript-mode psc-ide dash-functional dash eclim bind-map gh bind-key inflections edn multiple-cursors paredit peg cider seq spinner queue ghc magit magit-popup git-commit helm pkg-info epl powerline markdown-mode flycheck hydra with-editor iedit clojure-mode auto-complete auctex haskell-mode yasnippet highlight anzu smartparens evil undo-tree flyspell-correct async ht request helm-core popup avy projectile f company s slime-company hide-comnt helm-purpose window-purpose imenu-list csv-mode web-mode tagedit slim-mode scss-mode sass-mode pug-mode less-css-mode helm-css-scss haml-mode emmet-mode company-web web-completion-data srefactor alert log4e gntp org yapfify pyvenv pytest pyenv-mode py-isort pip-requirements live-py-mode hy-mode helm-pydoc cython-mode company-anaconda anaconda-mode pythonic parinfer slime common-lisp-snippets auctex-latexmk ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spotify spacemacs-theme spaceline smeargle reveal-in-osx-finder restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el pbcopy paradox ox-twbs ox-gfm osx-trash osx-dictionary orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file nix-mode neotree move-text mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum linum-relative link-hint ledger-mode launchctl intero info+ indent-guide ido-vertical-mode hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-spotify helm-projectile helm-nixos-options helm-mode-manager helm-make helm-hoogle helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag haskell-snippets google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gist gh-md flyspell-correct-helm flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu elisp-slime-nav dumb-jump company-statistics company-nixos-options company-ghci company-ghc company-emacs-eclim company-cabal company-auctex column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(proof-eager-annotation-face ((t (:background "medium blue"))))
+ '(proof-error-face ((t (:background "dark red"))))
+ '(proof-warning-face ((t (:background "indianred3")))))

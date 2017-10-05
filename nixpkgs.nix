@@ -19,9 +19,7 @@
     all = with self; buildEnv {
       name = "all";
       paths = [
-        myPythonEvn
-        python35
-        myHaskellEnv
+        coq_8_5
         stack
         jdk8 ant
         sbcl
@@ -29,8 +27,16 @@
         fasd
         ranger
         tree
+        tmux
 
         coreutils
+
+        elmPackages.elm
+
+        nodejs
+        nodePackages.grunt-cli
+        nodePackages.gulp
+        nodePackages.bower
 
         graphviz 
 
@@ -49,8 +55,35 @@
         jq
         httpie
         ledger
-
+        taskwarrior
+        
         python27Packages.platformio
+
+        (pkgs.python35.withPackages (ps: 
+          [ ps.pymongo
+            ps.nose
+            ps.pillow
+            ps.docopt
+            ps.sphinx
+            (ps.buildPythonPackage rec {
+              name = "mongoengine-0.11.0";
+
+              src = pkgs.fetchurl {
+                url = "mirror://pypi/m/mongoengine/${name}.tar.gz";
+                sha256 = "1ff6q0brknahh209kfa237w2a6dv141fykqppfr3ppi65l6jnlrr";
+              };
+
+              buildInputs = with ps; [ pymongo sphinx six ];
+              doCheck = false;
+
+              meta = {
+                homepage = "https://github.com/MongoEngine/mongoengine";
+                # license = licenses.mit;
+                description = "MongoEngine is a Python Object-Document Mapper for working with MongoDB";
+              };
+            })
+          ]
+        ))
       ];
     };
 
@@ -71,11 +104,13 @@
       buildInputs = with self; [
         python35
         python35Packages.pillow
+        python35Packages.sphinx
+        python35Packages.nose
         python35Packages.platformio
       ];
     };
 
-    myHaskellEnv = (self.haskellPackages.override {
+    myHaskell = (self.haskellPackages.override {
       overrides = self: super: {
         mkDerivation = args: super.mkDerivation (args // {
           doCheck = false; 
@@ -92,6 +127,14 @@
           vector
           QuickCheck
           hspec
+          blaze-html
+          http-types
+          scotty
+          wai
+          wai-websockets
+          warp
+          websockets
+
           (if (!self.stdenv.isDarwin)
           then z3
           else z3.overrideDerivation (drv: {
@@ -110,8 +153,12 @@
           lens
           transformers
           pipes
+          fgl
           pipes-bytestring
-          pipes-binary
+          (self.stdenv.lib.overrideDerivation pipes-binary (attr:{
+            name = "pipes-binary-fix";
+            patches = [./pipes-binary.patch];
+          }))
           monad-parallel
           stylish-haskell
           zlib

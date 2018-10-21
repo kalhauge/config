@@ -32,6 +32,9 @@ register_all zsh/themes $ZSH_CUSTOM
 # Spacemacs
 register spacemacs $HOME/.spacemacs
 
+# stack 
+register stack.yaml $HOME/.stack/config.yaml
+
 # Screen
 register screenrc $HOME/.screenrc
 

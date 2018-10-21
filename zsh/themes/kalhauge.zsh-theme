@@ -67,7 +67,7 @@ function directory() {
 }
 
 function info_line() {
-  echo -n '$(user) ($(task +in +PENDING count)) at $(host) in $(directory)$(git_info):'
+  echo -n '$(user) at $(host) in $(directory)$(git_info):'
 }
 
 function command_line() {

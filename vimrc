@@ -108,6 +108,8 @@ set autoread
 set relativenumber
 set number
 set noerrorbells
+set nofoldenable
+set encoding=utf-8
 
 set complete=.,w,b,u,t,i
 

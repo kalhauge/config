@@ -158,7 +158,44 @@ remote () {
 tab () {
     cut -d, -f $2 $1 | head -n $3 | column -ts, 
 }
-alias mm='(cd ~/Desktop && neomutt)'
+
+show_spinner()
+{
+  local -r pid="${1}"
+  local -r delay='0.20'
+  local spinstr='\|/-'
+  local temp
+  local N=$(date +%s)
+  while ps a | awk '{print $1}' | grep -q "${pid}"; do
+    temp="${spinstr#?}"
+    printf " [% 3ds] [%c]  " "$(($(date +%s) - $N))" "${spinstr}"
+    spinstr=${temp}${spinstr%"${temp}"}
+    printf "\b\b\b\b\b\b\b\b\b\b\b\b\b"
+    sleep "${delay}"
+  done
+  printf "    \b\b\b\b\b\b\b\b\b\b"
+}
+
+spinner ()
+{
+    read < <( "$@" & echo $! ) 
+    show_spinner "$REPLY"
+}
+
+m () {  
+    if [[ "$1" == "!" ]]
+    then
+        shift
+        spinner offlineimap -qf INBOX -u quiet
+    fi
+    (cd ~/Desktop && neomutt $@)
+}
+
+alias m!='m !'
+alias mz='m ! -z'
+alias mZ='m ! -Z'
+alias mp='m -p'
+alias ma='m -f +gmail/archive'
 
 alias rbora='remote rbora'
 alias rtupai='remote rtupai'

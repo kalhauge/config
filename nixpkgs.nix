@@ -26,6 +26,7 @@
       hlint
       cabal2nix
       pandoc-crossref
+      hledger
     ];
   in rec {
     all = buildEnv {
@@ -41,6 +42,15 @@
         tmux
         reattach-to-user-namespace
         pv 
+        entr
+
+        # mutt
+        neomutt
+        offlineimap
+        msmtp
+        notmuch
+        urlview
+
 
         pandoc
 

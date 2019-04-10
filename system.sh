@@ -50,3 +50,9 @@ register xconfigs/xprofile.sh $HOME/.xprofile
 # NixOS
 mkdir -p $HOME/.nixpkgs
 register nixpkgs.nix $HOME/.nixpkgs/config.nix
+
+# Mutt
+register muttrc $HOME/.muttrc
+register offlineimaprc $HOME/.offlineimaprc
+register msmtprc $HOME/.msmtprc
+register_all mutt $HOME/.mutt

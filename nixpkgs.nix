@@ -15,8 +15,20 @@
   packageOverrides = super:
   let
     self = super.pkgs;
+  in with self;
+  let
+    haskellTools = with haskellPackages; [
+      stack 
+      ghcid
+      stylish-haskell
+      hindent
+      hspec-discover
+      hlint
+      cabal2nix
+      pandoc-crossref
+    ];
   in rec {
-    all = with self; buildEnv {
+    all = buildEnv {
       name = "all";
       paths = [
         coq_8_5
@@ -24,7 +36,7 @@
         sbcl
 
         fasd
-        ranger
+        # ranger
         tree
         tmux
         reattach-to-user-namespace
@@ -36,14 +48,14 @@
 
         emacs
 
-        stack
-
         elmPackages.elm
 
-        nodejs
-        nodePackages.grunt-cli
-        nodePackages.gulp
-        nodePackages.bower
+        # python3 # .withPackages (packages: with packages; [ numpy ])
+
+        # nodejs
+        # nodePackages.grunt-cli
+        # nodePackages.gulp
+        # nodePackages.bower
 
         gnuplot
         graphviz 
@@ -62,7 +74,9 @@
         httpie
         ledger
         taskwarrior
-      ];
+      ] ++ haskellTools ;
     };
+    my-python = python3.withPackages 
+      (pkgs: with pkgs; [ numpy matplotlib scipy tabulate pygraphviz pandocfilters pandas ipython notebook pylint]);
   };
 }

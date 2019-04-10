@@ -155,11 +155,18 @@ remote () {
     ssh $1 -t "tmux attach || tmux new"
 }
 
+tab () {
+    cut -d, -f $2 $1 | head -n $3 | column -ts, 
+}
+alias mm='(cd ~/Desktop && neomutt)'
+
 alias rbora='remote rbora'
 alias rtupai='remote rtupai'
 alias rmopelia='remote rmopelia'
 alias rhuahine='remote rhuahine'
 alias rebtl='remote ebtl'
+
+alias na='notr agenda'
 
 # Colors
 
@@ -175,5 +182,4 @@ diary () {
     vim "$FILE"
 }
 
-
-
+alias em='if ! ps aux | grep "emacs --bg-daemon" | grep -v grep > /dev/null; then emacs --daemon; fi && emacsclient -c -nw'

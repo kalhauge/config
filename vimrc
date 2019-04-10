@@ -195,11 +195,13 @@ noremap <silent> <leader>tc :NERDComToggleComment<CR>
 noremap <silent> <leader>am :!tmux send-keys -t "2" 'make' Enter<CR><CR>
 noremap <silent> <leader>ar :call SendToTmux("!-1\n\n")<CR><CR>
 
+"" run
+noremap <silent> <leader>rr :!./%<CR>
+
 "" Buffers <leader>b
 noremap <leader>bs :CtrlPBuffer<CR>
 noremap <leader>bl :ls<CR>:b <Space>
 noremap <leader>bd :bdelete<CR>
-
 
 "" EASY motions: Line motions
 nmap s <Plug>(easymotion-s)
@@ -210,6 +212,9 @@ map <Leader>k <Plug>(easymotion-k)
  noremap <leader>p "+p
 vnoremap <leader>y "+y
 noremap <silent> <leader> :let @+=@0<CR>
+
+"" reformat notr
+noremap <leader>nf :%!notr fmt<CR>
 
 """ Language Specifics <leader>m {{{
 if !exists("HaskellBindings")

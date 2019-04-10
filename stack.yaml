@@ -4,10 +4,10 @@ templates:
     author-email: kalhauge@cs.ucla.edu
     copyright: MIT
     github-username: kalhauge
-
 nix:
   enable: true
   packages: 
     - glpk
     - pcre
     - zlib
+    - bzip2

@@ -49,7 +49,8 @@ register xconfigs/xprofile.sh $HOME/.xprofile
 
 # NixOS
 mkdir -p $HOME/.nixpkgs
-register nixpkgs.nix $HOME/.nixpkgs/config.nix
+register nix/nixpkgs.nix $HOME/.nixpkgs/config.nix
+register nix/haskell.nix $HOME/.config/nixpkgs/overlays/haskell.nix
 
 # Mutt
 register muttrc $HOME/.muttrc

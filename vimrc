@@ -42,6 +42,7 @@ Plug 'mattn/emmet-vim'
 Plug 'chriskempson/vim-tomorrow-theme'
 Plug 'chriskempson/base16-vim'
 Plug 'kalhauge/jellybeans.vim'
+Plug 'altercation/vim-colors-solarized'
 Plug '~/Develop/projects/2016/camelion.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -91,8 +92,8 @@ call plug#end()
 
 "" }}}
 
-set t_Co=16
-colorscheme camelion
+set background=light
+" colorscheme solarized
 
 """ Sane settings{{{
 
@@ -344,6 +345,7 @@ if has('nvim')
     "" Hackaround
     nmap <BS> <C-W>h 
     autocmd! BufWritePost * Neomake
+
 endif
 
 """ }}}

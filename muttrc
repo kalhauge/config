@@ -69,9 +69,12 @@ bind index gg       first-entry
 bind index G        last-entry
 
 bind index R        group-reply
-bind index <tab>    sync-mailbox
+macro index <tab> "<sync-mailbox><shell-escape>offlineimap -qf INBOX<enter>" "sync inbox"
+bind index <backtab>  sync-mailbox
 bind index <space>  collapse-thread
 bind index N search-opposite
+
+bind index w what-key
 
 # Ctrl-R to mark all as read
 macro index \Cr "T~U<enter><tag-prefix><clear-flag>N<untag-pattern>.<enter>" "mark all messages as read"
@@ -87,6 +90,8 @@ bind index p recall-message
 # Saner copy/move dialogs
 macro index C "<copy-message>?<toggle-mailboxes>" "copy a message to a mailbox"
 macro index M "<save-message>?<toggle-mailboxes>" "move a message to a mailbox"
+
+macro index S "<pipe-message>cat >> scratch.txt<enter><next-entry>" "pipe message to scratch"
 
 # Sidebar Navigation ---------------------------------
 bind index,pager <down>   sidebar-next
@@ -136,7 +141,7 @@ set reverse_name                     # reply as whomever it was to
 set include                          # include message in replies
 set forward_quote                    # include message in forwards
 
-set editor = "vim +7"        # Use terminal Vim to compose email.
+set editor = "nvim +7 -c 'call feedkeys('0')'"        # Use terminal Vim to compose email.
 
 set from     = "kalhauge@cs.ucla.edu"
 set sendmail = "msmtp -a ucla"
@@ -145,7 +150,7 @@ unset record
 
 bind compose p postpone-message
 
-set query_command = "contacts -Sf '%eTOKEN%n' '%s' | sed -n -e 's/\\(.\\)TOKEN/\\1\t/gp'"
+set query_command = "addr %s"
 bind editor <Tab> complete-query
 bind editor ^T    complete
 
@@ -162,3 +167,7 @@ color tilde yellow white
 color tree magenta white
 color body brightyellow white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
 color body brightblue white (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+
+source ~/.mutt/aliases.list
+
+

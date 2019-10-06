@@ -2,7 +2,7 @@ templates:
   params:
     author-name: Christian Gram Kalhauge
     author-email: kalhauge@cs.ucla.edu
-    copyright: MIT
+    copyright: BSD-3-Clause
     github-username: kalhauge
 nix:
   enable: true
@@ -11,3 +11,8 @@ nix:
     - pcre
     - zlib
     - bzip2
+    - clang
+    - darwin.apple_sdk.frameworks.Cocoa
+    - darwin.apple_sdk.frameworks.CoreServices
+    - pkgconfig
+    - cairo

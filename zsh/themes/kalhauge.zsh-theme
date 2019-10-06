@@ -66,8 +66,15 @@ function directory() {
     echo -n "$GREEN%$PATH_LEN<...<$folder%<<$RESET"
 }
 
+function nix() {
+    if [ -n "$IN_NIX_SHELL" ] 
+    then echo -n "($NIX_SHELL_PACKAGES) "
+    else echo -n ""
+    fi
+}
+
 function info_line() {
-  echo -n '$(user) at $(host) in $(directory)$(git_info):'
+    echo -n '$(nix)$(user) at $(host) in $(directory)$(git_info):'
 }
 
 function command_line() {

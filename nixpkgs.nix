@@ -8,7 +8,6 @@
 
   chromium = {
     enablePepperFlash = true;
-    enablePepperPdf = true;
     enableWideVine = true;
   };
 
@@ -16,19 +15,7 @@
   let
     self = super.pkgs;
   in with self;
-  let
-    haskellTools = with haskellPackages; [
-      stack 
-      ghcid
-      stylish-haskell
-      hindent
-      hspec-discover
-      hlint
-      cabal2nix
-      pandoc-crossref
-      hledger
-    ];
-  in rec {
+  rec {
     all = buildEnv {
       name = "all";
       paths = [
@@ -36,6 +23,7 @@
         jdk8 ant gradle
         sbcl
 
+        neovim
         fasd
         # ranger
         tree
@@ -45,20 +33,25 @@
         entr
 
         # mutt
+        ninja
         neomutt
         offlineimap
         msmtp
         notmuch
         urlview
 
+        ruby
+        bundler
 
-        pandoc
+        gnupg20
 
         coreutils
 
+        cairo
+
         emacs
 
-        elmPackages.elm
+        # elmPackages.elm
 
         # python3 # .withPackages (packages: with packages; [ numpy ])
 
@@ -84,9 +77,15 @@
         httpie
         ledger
         taskwarrior
-      ] ++ haskellTools ;
+
+        ffmpeg
+      ];
     };
     my-python = python3.withPackages 
-      (pkgs: with pkgs; [ numpy matplotlib scipy tabulate pygraphviz pandocfilters pandas ipython notebook pylint]);
+      (pkgs: with pkgs; [ 
+        numpy matplotlib scipy tabulate pygraphviz pandocfilters pandas ipython
+        notebook pylint graph-tool pygments
+        pydub
+        ]);
   };
 }

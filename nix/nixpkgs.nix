@@ -1,6 +1,7 @@
 {
   allowUnfree = true; # Sadly
   allowBroken = true;
+  allowUnsupportedSystem = true;
 
   firefox = {
     enableAdobeFlash = true;
@@ -20,7 +21,7 @@
       name = "all";
       paths = [
         coq_8_5
-        jdk8 ant gradle
+        jdk8 ant # gradle
         sbcl
 
         neovim
@@ -31,6 +32,8 @@
         reattach-to-user-namespace
         pv 
         entr
+        nix
+        nixops
 
         # mutt
         ninja
@@ -41,7 +44,6 @@
         urlview
 
         ruby
-        bundler
 
         gnupg20
 
@@ -83,7 +85,7 @@
     };
     my-python = python3.withPackages 
       (pkgs: with pkgs; [ 
-        numpy matplotlib scipy tabulate pygraphviz pandocfilters pandas ipython
+        numpy matplotlib scipy pygraphviz pandocfilters pandas ipython
         notebook pylint graph-tool pygments
         pydub
         ]);

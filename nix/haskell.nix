@@ -1,5 +1,5 @@
 self: super: 
-let 
+with super.haskell.lib; let 
   myHaskellPackages = hs: with hs; [ 
     Cabal
     QuickCheck
@@ -9,6 +9,7 @@ let
     directory
     free
     hspec
+    hspec-megaparsec
     lens
     lens-action
     megaparsec
@@ -21,6 +22,13 @@ let
     transformers
     typed-process
     vector
+    (dontHaddock vulkan-api)
+    GLFW-b
+    hakyll
+    hnix
+
+    tasty
+    hspec-expectations-pretty-diff
 
     dirtree
     jreduce
@@ -29,17 +37,21 @@ let
     jvm-binary
     reduce
     reduce-util
+    nixec
   ];
 
   myHaskellTools = hs: with hs; [ 
     stylish-haskell
     hlint
+    hindent
+    brittany
     ghcid
     hpack
     hspec-discover
     cabal-install
-    cabal2nix
     pandoc
+    doctest
+    profiteur
   ];
 
   ghcide-nix = import (builtins.fetchTarball "https://github.com/hercules-ci/ghcide-nix/tarball/master") {};
@@ -58,7 +70,7 @@ let
     in super.buildEnv {
       name = name;
       paths = [
-        (ghcWith (hs: myHaskellPackages hs ++ myHaskellTools hs)) 
+        (ghcWith (hs: myHaskellPackages hs ++ myHaskellTools hs ++ [super.elmPackages.elm ])) 
       ] ++ tools;
     };
 
@@ -66,6 +78,7 @@ in {
   haskellEnvHoogle = haskellEnvFun {
     name = "haskellEnvHoogle";
     withHoogle = true;
-    tools = [ ghcide-nix.ghcide-ghc864 ];
+    tools = [ # ghcide-nix.ghcide-ghc864 
+    ];
   };
 }

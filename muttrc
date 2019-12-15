@@ -154,19 +154,39 @@ set query_command = "addr %s"
 bind editor <Tab> complete-query
 bind editor ^T    complete
 
-# Colors ---
-color normal black white
-color attachment brightyellow white
-color hdrdefault blue white
-color indicator yellow white
-color markers brightred white
-color quoted yellow white
-color signature cyan white
-color status white blue
-color tilde yellow white
-color tree magenta white
-color body brightyellow white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
-color body brightblue white (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
+# Colors
+# Default
+color normal        color07 default
+color error         color01 default
+color tilde         color20 default
+color message       color06 default
+color attachment    color08 default
+color search        color05 default
+color indicator     color18 color06
+color tree          color03 default
+color signature     color05 default
+
+color status        color08       color18
+color status        color06       color18 '=([^ ]*).*Messages' 1
+color status        color03       color18 '([^ ]+@[^ ]+)'
+color status        color02       color18 'Messages'
+color status        brightcolor15 color18 'New'
+color status        color05       color18 'Flag'
+color status        color04       color18 'Tag'
+
+# # Colors ---
+# color normal white black
+# color attachment brightyellow white
+# color hdrdefault blue white
+# color indicator yellow white
+# color markers brightred white
+# color quoted yellow white
+# color signature cyan white
+# color status white blue
+# color tilde yellow white
+# color tree magenta white
+# color body brightyellow white [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+# color body brightblue white (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+
 
 source ~/.mutt/aliases.list
 

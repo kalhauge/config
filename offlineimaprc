@@ -21,10 +21,10 @@ nametrans = lambda folder: {'drafts':  '[Gmail]/Drafts',
 
 [Repository Gmail-Remote]
 type = Gmail
-sslcacertfile = ~/.mutt/cert/keychain.pem
+ssl_version=tls1_2
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
 remoteuser = christiankalhauge@gmail.com
-remotepasseval = get_keychain_pass(account="christiankalhauge@gmail.com", server="imap.gmail.com")
-# remotepass = get_keychain_pass(account="christiankalhauge@gmail.com", server="imap.gmail.com")
+remotepasseval = get_keychain_pass(_file="~/.mail/gmail.gpg")
 realdelete = no
 maxconnections = 3
 nametrans = lambda folder: {'[Gmail]/Drafts':    'drafts',
@@ -36,4 +36,4 @@ nametrans = lambda folder: {'[Gmail]/Drafts':    'drafts',
 folderfilter = lambda folder: folder not in ['[Gmail]/Trash',
                                              '[Gmail]/Important',
                                              '[Gmail]/Spam',
-                                             ] 
+                                             ]
